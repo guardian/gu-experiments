@@ -5,6 +5,14 @@ api_version: 1
 threadsafe: true
 
 handlers:
+- url : /related/galleries
+  script: galleries.app
 - url : /.*
   script: experiments.app
-  
+
+libraries:
+- name: jinja2
+  version: latest
+
+builtins:
+- remote_api: on  
