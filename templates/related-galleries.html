@@ -1,0 +1,33 @@
+<! docttype>
+
+<html>
+
+<body>
+	<section id="gallery-links">
+		<style>
+			.related-galleries {
+				margin-top: 10px;
+			}
+			.related-galleries-gallery {
+				margin-bottom: 10px;
+				border-bottom: solid 1px white;
+				padding-bottom: 3px;
+			}
+			h3.related-galleries-headline {
+				font-weight: normal;
+				padding-bottom: 3px;
+			}
+		</style>
+
+		<h2>{{title}}</h2>
+
+		<ul class="related-galleries">
+		{% for gallery in galleries %}
+		<li class="related-galleries-gallery">
+		<h3 class="related-galleries-headline">{{gallery.fields.headline}}</h3>
+		<div><a href="{{gallery.webUrl}}"><img src="{{gallery.fields.thumbnail}}" alt="{{gallery.fields.headline}}" title="{{gallery.fields.headline}}"/></a></div>
+		</li>
+		{% endfor %}
+		</ul>
+	</section>
+</html>
