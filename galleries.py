@@ -42,6 +42,8 @@ def related_galleries(page_url):
 
 	return data["response"]["relatedContent"]
 
+def all_images(url):
+	return []
 
 class RelatedGalleries(webapp2.RequestHandler):
 	def get(self):
@@ -54,6 +56,18 @@ class RelatedGalleries(webapp2.RequestHandler):
 		headers.set_cors_headers(self.response)
 		self.response.out.write(template.render(data))
 
+class AllImages(webapp2.RequestHandler):
+	def get(self):
+		template = jinja_environment.get_template("all-images-gallery.html")
+		template_values = {}
+
+		if "page-url" in self.request.params:
+			template_values["images"] = all_images(self.request.params["page-url"])
+
+		headers.set_cors_headers(self.response)
+		self.response.out.write(template.render(template_values))
+
 app = webapp2.WSGIApplication([
-	('/related/galleries', RelatedGalleries),],
+	('/related/galleries', RelatedGalleries),
+	('/galleries/all-pictures', AllImages),],
 	debug=True)
