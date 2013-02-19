@@ -3,7 +3,20 @@
 <html>
 <body>
 	<section id="entire-gallery">
+		<style>
+		</style>
 		{% for image in images %}
+		<div class="article">
+			<div class="figure">
+				<div class="placeholder">
+					<img src="{{image.file}}" alt="{{image.fieldscaption}}" title="{{image.fields.caption}}" />
+				</div>
+			</div>
+			<div class="figcaption">
+				<span class="caption">{{image.fields.caption}}</span>
+				<span class="credit">{{image.fields.credit}}</span>
+			</div>
+		</div>
 		{% endfor %}
 	</section>
 </body>

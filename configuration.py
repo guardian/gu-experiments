@@ -1,5 +1,7 @@
 from models import Configuration
 
+import logging
+
 def create(key, value):
 	config = Configuration(key = key, value = value)
 	key = config.put()

@@ -1,3 +1,5 @@
+import configuration
+
 import webapp2
 import jinja2
 import os
@@ -42,8 +44,29 @@ def related_galleries(page_url):
 
 	return data["response"]["relatedContent"]
 
-def all_images(url):
-	return []
+def all_images(page_url):
+	params = {"format" : "json",
+		"show-media" : "picture",
+		"order-by" : "newest",
+		"show-fields" : "thumbnail,headline",
+		"api-key" : configuration.lookup("CONTENT_API_KEY"),}
+
+	parsed_url = urlparse(page_url)
+
+	content_api_url = "http://content.guardianapis.com" + parsed_url.path + "?" + urllib.urlencode(params)
+
+	logging.info(content_api_url)
+
+	result = fetch(content_api_url, deadline = 9)
+
+	if not result.status_code == 200:
+		return []
+
+	data = json.loads(result.content)
+
+	logging.info(data)
+
+	return data.get("response", {}).get("content", {}).get("mediaAssets", [])
 
 class RelatedGalleries(webapp2.RequestHandler):
 	def get(self):
