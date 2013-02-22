@@ -9,6 +9,7 @@ import logging
 import headers
 
 from google.appengine.api.urlfetch import fetch
+from google.appengine.api import memcache
 from urlparse import urlparse
 import urllib
 
@@ -31,7 +32,19 @@ def related_galleries(page_url, recent = None):
 
 	parsed_url = urlparse(page_url)
 
-	content_api_url = "http://content.guardianapis.com" + parsed_url.path + "?" + urllib.urlencode(params)
+	content_path = parsed_url.path
+
+	cache_key = content_path
+
+	if recent:
+		cache_key = cache_key + ".recent"
+
+	cached_content = memcache.get(cache_key)
+
+	if cached_content:
+		return json.loads(cached_content)
+
+	content_api_url = "http://content.guardianapis.com" + content_path + "?" + urllib.urlencode(params)
 
 	#logging.info(content_api_url)
 
@@ -46,7 +59,11 @@ def related_galleries(page_url, recent = None):
 
 	if not "relatedContent" in data["response"]: return None
 
-	return data["response"]["relatedContent"]
+	related_content = data["response"]["relatedContent"]
+
+	memcache.add(cache_key, json.dumps(related_content), 10 * 60)
+
+	return related_content
 
 def all_images(page_url):
 	params = {"format" : "json",
