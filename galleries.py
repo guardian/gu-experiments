@@ -26,7 +26,6 @@ def related_galleries(page_url, recent = None):
 		"order-by" : "newest",
 		"show-fields" : "thumbnail,headline",}
 
-	logging.info(recent)
 	if recent:
 		params['date-id'] = 'date/last30days'
 
