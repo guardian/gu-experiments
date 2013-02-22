@@ -18,18 +18,22 @@ jinja_environment = jinja2.Environment(
 
 #http://content.guardianapis.com/uk/gallery/2012/dec/18/queen-visits-downing-street-pictures?format=json&show-related=true&tag=type%2Fgallery&order-by=newest
 
-def related_galleries(page_url):
+def related_galleries(page_url, recent = None):
 	params = {"format" : "json",
 		"show-related" : "true",
 		"tag" : "type/gallery",
 		"order-by" : "newest",
 		"show-fields" : "thumbnail,headline",}
 
+	logging.info(recent)
+	if recent:
+		params['date-id'] = 'date/last30days'
+
 	parsed_url = urlparse(page_url)
 
 	content_api_url = "http://content.guardianapis.com" + parsed_url.path + "?" + urllib.urlencode(params)
 
-	logging.info(content_api_url)
+	#logging.info(content_api_url)
 
 	result = fetch(content_api_url, deadline = 9)
 
@@ -38,7 +42,7 @@ def related_galleries(page_url):
 
 	data = json.loads(result.content)
 
-	logging.info(data)
+	#logging.info(data)
 
 	if not "relatedContent" in data["response"]: return None
 
@@ -55,7 +59,7 @@ def all_images(page_url):
 
 	content_api_url = "http://content.guardianapis.com" + parsed_url.path + "?" + urllib.urlencode(params)
 
-	logging.info(content_api_url)
+	#logging.info(content_api_url)
 
 	result = fetch(content_api_url, deadline = 9)
 
@@ -64,7 +68,7 @@ def all_images(page_url):
 
 	data = json.loads(result.content)
 
-	logging.info(data)
+	#logging.info(data)
 
 	return data.get("response", {}).get("content", {}).get("mediaAssets", [])
 
@@ -75,6 +79,17 @@ class RelatedGalleries(webapp2.RequestHandler):
 		data = {"title" : "Related galleries",}
 		if "page-url" in self.request.params:
 			data["galleries"] = related_galleries(self.request.params["page-url"])[:4]
+
+		headers.set_cors_headers(self.response)
+		self.response.out.write(template.render(data))
+
+class RecentRelatedGalleries(webapp2.RequestHandler):
+	def get(self):
+		template = jinja_environment.get_template("related-galleries.html")
+
+		data = {"title" : "Related galleries",}
+		if "page-url" in self.request.params:
+			data["galleries"] = related_galleries(self.request.params["page-url"], recent=True)[:4]
 
 		headers.set_cors_headers(self.response)
 		self.response.out.write(template.render(data))
@@ -92,5 +107,6 @@ class AllImages(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([
 	('/related/galleries', RelatedGalleries),
+	('/related/galleries/recent', RecentRelatedGalleries),
 	('/galleries/all-pictures', AllImages),],
 	debug=True)

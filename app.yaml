@@ -1,11 +1,11 @@
 application: gu-experiments
-version: 2
+version: 3
 runtime: python27
 api_version: 1
 threadsafe: true
 
 handlers:
-- url : /related/galleries
+- url : /related/galleries.*
   script: galleries.app
 - url : /galleries/.*
   script: galleries.app
