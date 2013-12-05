@@ -92,7 +92,7 @@ class RelatedGalleries(webapp2.RequestHandler):
 	def get(self):
 		template = jinja_environment.get_template("related-galleries.html")
 
-		data = {"title" : "Related galleries",}
+		data = {"title" : "More galleries",}
 		if "page-url" in self.request.params:
 			data["galleries"] = related_galleries(self.request.params["page-url"])[:4]
 
@@ -103,7 +103,7 @@ class RecentRelatedGalleries(webapp2.RequestHandler):
 	def get(self):
 		template = jinja_environment.get_template("related-galleries.html")
 
-		data = {"title" : "Related galleries",}
+		data = {"title" : "More galleries",}
 		if "page-url" in self.request.params:
 			data["galleries"] = related_galleries(self.request.params["page-url"], recent=True)[:4]
 

@@ -1,0 +1,19 @@
+<! docttype>
+
+<html>
+
+<body>
+	<section id="us-most-popular">
+
+
+		<p class="b2 zg-date">Popular content</p>
+
+		{{hello}}
+
+		<ol class="most-popular-items">
+		{% for item in most_popular %}
+		<li class="l1 thumb most-popular-items-item"><img class="tinythumb"><span class="rank">1</span><a href="">Headline</a></li>
+		{% endfor %}
+		</ul>
+	</section>
+</html>
