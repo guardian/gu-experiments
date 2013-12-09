@@ -31,7 +31,7 @@ def popular_by_country(country_code="gb", hours="1", section_id=None):
 
 	most_read_url = most_read_url + "?" + urllib.urlencode(params)
 
-	logging.info(most_read_url)
+	#logging.info(most_read_url)
 
 	result = fetch(most_read_url)
 
@@ -47,7 +47,7 @@ def popular(section_id = None):
 		return None
 
 	ophan_api_key = results.iter().next().value
-	logging.info(ophan_api_key)
+	#logging.info(ophan_api_key)
 
 	most_read_url = "http://api.ophan.co.uk/api/mostread"
 
@@ -59,7 +59,7 @@ def popular(section_id = None):
 
 	most_read_url = most_read_url + "?" + urllib.urlencode(params)
 
-	logging.info(most_read_url)
+	#logging.info(most_read_url)
 
 	result = fetch(most_read_url)
 

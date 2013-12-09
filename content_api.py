@@ -19,7 +19,7 @@ def read(content_id, params = None):
 	if params:
 		url = url + "?" + urllib.urlencode(params)
 
-	logging.info(url)
+	#logging.info(url)
 
 	cached_data = client.get(url)
 
