@@ -17,12 +17,9 @@ def read(content_id, params = None):
 	url = "http://%s%s" % (CONTENT_API_HOST, content_id)
 
 	if params:
-		cached_key = client.get('API_KEY')
-		if not 'api-key' in params and cached_key:
-			params['api-key'] = cached_key
 		url = url + "?" + urllib.urlencode(params)
 
-	#logging.debug(url)
+	logging.info(url)
 
 	cached_data = client.get(url)
 
