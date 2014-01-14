@@ -21,7 +21,7 @@ jinja_environment = jinja2.Environment(
 
 
 
-class MostPopular(webapp2.RequestHandler):
+class MostPopularByCountry(webapp2.RequestHandler):
 	def get(self, country_code="us", entries="5"):
 		template = jinja_environment.get_template("most-popular.html")
 
@@ -56,6 +56,37 @@ class MostPopular(webapp2.RequestHandler):
 		headers.set_cors_headers(self.response)
 		self.response.out.write(template.render(data))
 
+class MostPopular(webapp2.RequestHandler):
+	def get(self, entries="5"):
+		template = jinja_environment.get_template("most-popular.html")
+
+		cache_key = "ophan_list_popular"
+
+		ophan_list_data = memcache.get(cache_key)
+
+		if not ophan_list_data:
+			ophan_list_data = ophan.popular()
+			memcache.set(cache_key, ophan_list_data, 60)
+
+		content_list = []
+
+		if ophan_list_data:
+			ophan_list = json.loads(ophan_list_data)
+			content_list = [content_api.content_id(result['url']) for result in ophan_list]
+			content_list = [content_api.read(path, params={"show-fields" : "headline,thumbnail"}) for path in content_list]
+			content_list = [json.loads(result) for result in content_list if result]
+			content_list = [result["response"]["content"] for result in content_list if content_api.response_ok(result)]
+			content_list = content_list[0:int(entries)]
+
+		data ={
+			"most_popular" : content_list,
+			"component_title" : "Most popular",
+		}
+
+		headers.set_cors_headers(self.response)
+		self.response.out.write(template.render(data))
+
 app = webapp2.WSGIApplication([
-	('/components/most-popular/(\w{2})/(\d+)', MostPopular),],
+	('/components/most-popular/(\w{2})/(\d+)', MostPopularByCountry),
+	('/components/most-popular/(?P<entries>\d+)', MostPopular),],
 	debug=True)

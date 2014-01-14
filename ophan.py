@@ -17,7 +17,7 @@ def popular_by_country(country_code="gb", hours="1", section_id=None):
 		return None
 
 	ophan_api_key = results.iter().next().value
-	logging.info(ophan_api_key)
+	#logging.info(ophan_api_key)
 
 	most_read_url = "http://api.ophan.co.uk/api/mostread"
 
