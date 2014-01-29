@@ -35,6 +35,23 @@ def read(content_id, params = None):
 
 	return result.content
 
+def search(query):
+	url = "http://content.guardianapis.com/search?%s" % urllib.urlencode(query)
+
+	cached_data = memcache.get(url)
+
+	if cached_data:
+		return cached_data
+
+	result = fetch(url)
+
+	if not result.status_code == 200:
+		logging.warning("Failed to search API: %s" % url)
+		return None
+	
+	memcache.set(url, result.content, time=60*3)
+	return result.content
+
 def response_ok(response):
 	if not response:
 		return False

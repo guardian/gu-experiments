@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<body>
+		<style>
+			.recipe-promotion-body-review {
+				display: inline-block;
+				max-width: 140px;
+				margin-right: 10px;
+				vertical-align: top;
+			}
+		</style>
+		<div class="component col-8">
+			{% if author %}
+			<div class="hd"><h2>More recipes from {{author.webTitle}}</h2></div>
+			{% else %}
+			<div class="hd"><h2>More recipes from The Guardian</h2></div>
+			{% endif %}
+			<div class="bd" id="recipe-promotion-body">
+				{% for recipe in recipes %}
+					<ul class="recipe-promotion-body-review">
+						<li>
+							<a href="{{ recipe.webUrl }}"><img src="{{ recipe.fields.thumbnail }}"></a>
+						</li>
+						<li>
+							<a href="{{ recipe.webUrl}}">{{ recipe.fields.headline }}</a>
+						</li>
+					</ul>
+				{% endfor %}
+			</div>
+		</div>
+	</body>
+</html>
