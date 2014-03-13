@@ -218,10 +218,77 @@ class SeriesRandomBox(webapp2.RequestHandler):
 
 		self.response.out.write(template.render(template_values))
 
+class SeriesOrderedBox(webapp2.RequestHandler):
+	def get(self, entries=4):
+		template = jinja_environment.get_template("boxes/series.html")
+		template_values = {}
+		headers.set_cors_headers(self.response)
+
+		if not "path" in self.request.params:
+			webapp2.abort(400, "No path specified")
+
+		path = self.request.params["path"]
+		content_id = path[1:]
+
+		content = content_api.read(path, {"show-tags" : "series"})
+		content_data = json.loads(content)
+
+		series_tags = [t for t in content_data.get("response", {}).get("content", {}).get("tags",[]) if t.get("type", "") == "series"]
+
+		if not len(series_tags) == 1:
+			if series_tags:
+				logging.warning("Content did not have a single series tag: %s" % path)
+			for tag in series_tags:
+				logging.debug(tag)
+			webapp2.abort(500, "Single series tag not available")
+
+		series_tag = series_tags[0]
+		#logging.info(series_tag)
+
+		query = {
+			"tag" : series_tag["id"],
+			"show-fields" : "headline,thumbnail",
+			"page-size" : 50,
+		}
+
+		content = content_api.search(query)
+
+		if not content:
+			abort(404, "No content found for series tag")
+
+		content_data = json.loads(content)
+
+		items = content_data.get("response", {}).get("results", [])
+
+		content_index = [c["id"] for c in items].index(content_id)
+		logging.info(content_index)
+
+		valid_items = [i for i in items if "thumbnail" in i.get("fields", {}) and i['id'] != content_id]
+
+		template_values["series_name"] = series_tag['webTitle']
+		total_items = len(valid_items)
+		window = (entries / 2)
+		min_index = content_index - window
+		max_index = content_index + window
+
+		if min_index < 0:
+			max_index += (-1 * min_index)
+			min_index = 0
+
+		if max_index > total_items:
+			min_index -= (max_index - total_items)
+			max_index = total_items
+		logging.info(min_index)
+		logging.info(max_index)
+		template_values["series_content"] = valid_items[min_index:max_index]
+
+		self.response.out.write(template.render(template_values))
+
 app = webapp2.WSGIApplication([
 	('/components/most-popular/(\w{2})/(\d+)', MostPopularByCountry),
 	('/components/most-popular/(?P<entries>\d+)', MostPopular),
 	('/components/recipes/more-by-author/(?P<entries>\d+)', AuthorRecipeBox),
 	('/components/recipes/more/(?P<entries>\d+)', RecipeBox),
-	('/components/series/random', SeriesRandomBox),],
+	('/components/series/random', SeriesRandomBox),
+	('/components/series/ordered', SeriesOrderedBox),],
 	debug=True)
