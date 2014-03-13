@@ -170,9 +170,58 @@ class AuthorRecipeBox(webapp2.RequestHandler):
 
 		self.response.out.write(template.render(data))
 
+class SeriesRandomBox(webapp2.RequestHandler):
+	def get(self, entries=4):
+		template = jinja_environment.get_template("boxes/series.html")
+		template_values = {}
+		headers.set_cors_headers(self.response)
+
+		if not "path" in self.request.params:
+			webapp2.abort(400, "No path specified")
+
+		path = self.request.params["path"]
+		content = content_api.read(path, {"show-tags" : "series"})
+		content_data = json.loads(content)
+
+		series_tags = [t for t in content_data.get("response", {}).get("content", {}).get("tags",[]) if t.get("type", "") == "series"]
+
+		if not len(series_tags) == 1:
+			if series_tags:
+				logging.warning("Content did not have a single series tag: %s" % path)
+			for tag in series_tags:
+				logging.debug(tag)
+			webapp2.abort(500, "Single series tag not available")
+
+		series_tag = series_tags[0]
+		#logging.info(series_tag)
+
+		query = {
+			"tag" : series_tag["id"],
+			"show-fields" : "headline,thumbnail",
+			"page-size" : 50,
+		}
+
+		content = content_api.search(query)
+
+		if not content:
+			abort(404, "No content found for series tag")
+
+		content_data = json.loads(content)
+
+		items = content_data.get("response", {}).get("results", [])
+
+		valid_items = [i for i in items if "thumbnail" in i.get("fields", {}) and i['id'] != path[1:]]
+		random.shuffle(valid_items)
+
+		template_values["series_name"] = series_tag['webTitle']
+		template_values["series_content"] = valid_items[:entries]
+
+		self.response.out.write(template.render(template_values))
+
 app = webapp2.WSGIApplication([
 	('/components/most-popular/(\w{2})/(\d+)', MostPopularByCountry),
 	('/components/most-popular/(?P<entries>\d+)', MostPopular),
 	('/components/recipes/more-by-author/(?P<entries>\d+)', AuthorRecipeBox),
-	('/components/recipes/more/(?P<entries>\d+)', RecipeBox)],
+	('/components/recipes/more/(?P<entries>\d+)', RecipeBox),
+	('/components/series/random', SeriesRandomBox),],
 	debug=True)

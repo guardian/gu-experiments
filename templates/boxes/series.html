@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<body>
+		<style>
+			.promotion-box {
+				display: inline-block;
+				max-width: 140px;
+				margin-right: 10px;
+				margin-bottom: 10px;
+				vertical-align: top;
+			}
+		</style>
+		<div class="component col-8">
+			<div class="hd"><h2>More from {{series_name}}</h2></div>
+			<div class="bd" id="gallery-promotion-body">
+				{% for item in series_content %}
+					<ul class="promotion-box">
+						<li>
+							<a href="{{ item.webUrl }}"><img src="{{ item.fields.thumbnail }}"></a>
+						</li>
+						<li>
+							<a href="{{ item.webUrl}}">{{ item.fields.headline }}</a>
+						</li>
+					</ul>
+				{% endfor %}
+			</div>
+		</div>
+	</body>
+</html>
