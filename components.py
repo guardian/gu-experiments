@@ -23,18 +23,28 @@ import content_api
 jinja_environment = jinja2.Environment(
 	loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), "templates")))
 
+def most_popular_ophan_cache_key(country_code, section):
+	cache_key = "ophan_list_{0}".format(country_code)
 
+	if section:
+		cache_key = cache_key + "_{0}".format(section)
+	return cache_key
 
 class MostPopularByCountry(webapp2.RequestHandler):
-	def get(self, country_code="us", entries="5"):
+	def get(self, country_code="us", entries="5", section=None):
 		template = jinja_environment.get_template("most-popular.html")
 
-		cache_key = "ophan_list_{0}".format(country_code)
+		cache_key = most_popular_ophan_cache_key(country_code, section)
 
 		ophan_list_data = memcache.get(cache_key)
 
 		if not ophan_list_data:
-			ophan_list_data = ophan.popular_by_country(country_code=country_code)
+			ophan_list_data = []
+			if section:
+				ophan_list_data = ophan.popular_by_country(country_code=country_code, section_id=section)
+			else:
+				ophan_list_data = ophan.popular_by_country(country_code=country_code)
+
 			memcache.set(cache_key, ophan_list_data, 60)
 
 		content_list = []
@@ -50,6 +60,8 @@ class MostPopularByCountry(webapp2.RequestHandler):
 		country_name_lookup = {
 			"us" : "in the US",
 			"au" : "in Australia",
+			"in" : "in India",
+			"ca" : "in Canda",
 		}
 
 		data ={
@@ -286,6 +298,7 @@ class SeriesOrderedBox(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([
 	('/components/most-popular/(\w{2})/(\d+)', MostPopularByCountry),
+	('/components/most-popular/(\w{2})/(\d+)/section/(?P<section>[a-z-]+)', MostPopularByCountry),
 	('/components/most-popular/(?P<entries>\d+)', MostPopular),
 	('/components/recipes/more-by-author/(?P<entries>\d+)', AuthorRecipeBox),
 	('/components/recipes/more/(?P<entries>\d+)', RecipeBox),
