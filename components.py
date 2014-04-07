@@ -55,6 +55,7 @@ class MostPopularByCountry(webapp2.RequestHandler):
 			content_list = [content_api.read(path, params={"show-fields" : "headline,thumbnail"}) for path in content_list]
 			content_list = [json.loads(result) for result in content_list if result]
 			content_list = [result["response"]["content"] for result in content_list if content_api.response_ok(result)]
+			content_list = [c for c in content_list if c.get("fields", {}).get("thumbnail", None)]
 			content_list = content_list[0:int(entries)]
 
 		country_name_lookup = {
