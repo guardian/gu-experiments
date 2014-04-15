@@ -62,7 +62,7 @@ class MostPopularByCountry(webapp2.RequestHandler):
 			"us" : "in the US",
 			"au" : "in Australia",
 			"in" : "in India",
-			"ca" : "in Canda",
+			"ca" : "in Canada",
 		}
 
 		data ={
