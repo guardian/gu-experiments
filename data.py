@@ -89,6 +89,7 @@ class MostPopularFromOphan(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([
 	('/data/most-popular/(?P<country_code>\w{2})/(?P<entries>\d+)/section/(?P<section>[a-z-]+)/hours/(?P<hours>\d+)', MostPopularFromOphan),
+	('/data/most-popular/(?P<country_code>\w{2})/(?P<entries>\d+)', MostPopularFromOphan),
 	('/data/most-popular/(?P<country_code>\w{2})/(?P<entries>\d+)/section/(?P<section>[a-z-]+)/hours/(?P<hours>\d+)/referrer/(?P<referrer>.+)', MostPopularFromOphan),
 	],
 	debug=True)
