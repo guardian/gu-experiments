@@ -11,7 +11,7 @@ client = memcache.Client()
 FIFTEEN_MINUTES = 15 * 60
 
 
-def popular_by_country(country_code="gb", hours="1", section_id=None):
+def popular_by_country(country_code="gb", hours="1", section_id=None, referrer=None):
 	results = Configuration.query(Configuration.key == "OPHAN_API_KEY")
 	if not results.iter().has_next():
 		return None
@@ -28,6 +28,9 @@ def popular_by_country(country_code="gb", hours="1", section_id=None):
 		'country' : country_code,
 		'api-key' : ophan_api_key,
 		}
+
+	if referrer:
+		params['referrer'] = referrer
 
 	most_read_url = most_read_url + "?" + urllib.urlencode(params)
 

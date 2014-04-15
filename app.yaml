@@ -1,5 +1,5 @@
 application: gu-experiments
-version: 12
+version: 13
 runtime: python27
 api_version: 1
 threadsafe: true
@@ -11,6 +11,8 @@ handlers:
   script: galleries.app
 - url: /components/.*
   script: components.app
+- url: /data/.*
+  script: data.app
 - url : /.*
   script: experiments.app
 
