@@ -5,7 +5,11 @@ import logging
 from google.appengine.api.urlfetch import fetch
 from google.appengine.api import memcache
 
+import configuration
+
 CONTENT_API_HOST = 'content.guardianapis.com'
+
+api_host = configuration.lookup('CONTENT_API_HOST', CONTENT_API_HOST)
 
 def content_id(url):
 	parsed_url = urlparse.urlparse(url)
@@ -14,7 +18,7 @@ def content_id(url):
 def read(content_id, params = None):
 	client = memcache.Client()
 
-	url = "http://%s%s" % (CONTENT_API_HOST, content_id)
+	url = "http://%s%s" % (api_host, content_id)
 
 	if params:
 		url = url + "?" + urllib.urlencode(params)

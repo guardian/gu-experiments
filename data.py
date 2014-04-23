@@ -42,7 +42,7 @@ class MostPopularFromOphan(webapp2.RequestHandler):
 
 		template = jinja_environment.get_template("most-popular.html")
 
-		logging.info(self.request.path)
+		#logging.info(self.request.path)
 
 		cached_output = memcache.get(self.request.path)
 
@@ -65,7 +65,7 @@ class MostPopularFromOphan(webapp2.RequestHandler):
 		if ophan_list_data:
 			ophan_list = json.loads(ophan_list_data)
 			content_list = [content_api.content_id(result['url']) for result in ophan_list]
-			content_list = [content_api.read(path, params={"show-fields" : "headline,thumbnail"}) for path in content_list]
+			content_list = [content_api.read(path, params={"show-fields" : "headline,thumbnail,standfirst"}) for path in content_list]
 			content_list = [json.loads(result) for result in content_list if result]
 			content_list = [result["response"]["content"] for result in content_list if content_api.response_ok(result)]
 			content_list = [c for c in content_list if c.get("fields", {}).get("thumbnail", None)]
@@ -83,7 +83,8 @@ class MostPopularFromOphan(webapp2.RequestHandler):
 			"component_title" : "Most popular {0}".format(country_name_lookup.get(country_code, "")),
 		}
 
-		memcache.set(self.request.path, data, CONTENT_CACHE_SECONDS)
+		if content_list:
+			memcache.set(self.request.path, data, CONTENT_CACHE_SECONDS)
 
 		self.response.out.write(json.dumps(data))
 
@@ -91,5 +92,6 @@ app = webapp2.WSGIApplication([
 	('/data/most-popular/(?P<country_code>\w{2})/(?P<entries>\d+)/section/(?P<section>[a-z-]+)/hours/(?P<hours>\d+)', MostPopularFromOphan),
 	('/data/most-popular/(?P<country_code>\w{2})/(?P<entries>\d+)', MostPopularFromOphan),
 	('/data/most-popular/(?P<country_code>\w{2})/(?P<entries>\d+)/section/(?P<section>[a-z-]+)/hours/(?P<hours>\d+)/referrer/(?P<referrer>.+)', MostPopularFromOphan),
+	webapp2.Route(r'/data/most-popular/<country_code:\w{2}>/<entries:\d+>/hours/<hours:\d+>/referrer/<referrer:.+>', handler=MostPopularFromOphan),
 	],
 	debug=True)
