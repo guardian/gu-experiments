@@ -310,8 +310,26 @@ class ContributorFooterCard(webapp2.RequestHandler):
 	def get(self):
 		headers.set_cors_headers(self.response)
 		
-		template = jinja_environment.get_template("cards/valenti.html")
+		template = jinja_environment.get_template("cards/contributor/footer.html")
 		template_values = {}
+
+		if not 'profile-id' in self.request.params:
+			webapp2.abort(400, 'No profile id supplied')
+
+		profile_id = self.request.params['profile-id']
+
+		logging.info(profile_id)
+
+		contributor_json = content_api.read(profile_id)
+
+		logging.info(contributor_json)
+
+		if not contributor_json:
+			webapp2.abort(404, 'Could not find data for profile id: {profile_id}'.format(profile_id=profile_id))
+
+		contributor_data = json.loads(contributor_json)
+		
+		template_values['contributor'] = contributor_data.get('response', {}).get('tag', {})
 
 		self.response.out.write(template.render(template_values))
 
