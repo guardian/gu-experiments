@@ -297,6 +297,24 @@ class SeriesOrderedBox(webapp2.RequestHandler):
 
 		self.response.out.write(template.render(template_values))
 
+class ValentiCard(webapp2.RequestHandler):
+	def get(self):
+		headers.set_cors_headers(self.response)
+		
+		template = jinja_environment.get_template("cards/valenti.html")
+		template_values = {}
+
+		self.response.out.write(template.render(template_values))
+
+class ContributorFooterCard(webapp2.RequestHandler):
+	def get(self):
+		headers.set_cors_headers(self.response)
+		
+		template = jinja_environment.get_template("cards/valenti.html")
+		template_values = {}
+
+		self.response.out.write(template.render(template_values))
+
 app = webapp2.WSGIApplication([
 	('/components/most-popular/(\w{2})/(\d+)', MostPopularByCountry),
 	('/components/most-popular/(\w{2})/(\d+)/section/(?P<section>[a-z-]+)', MostPopularByCountry),
@@ -304,5 +322,7 @@ app = webapp2.WSGIApplication([
 	('/components/recipes/more-by-author/(?P<entries>\d+)', AuthorRecipeBox),
 	('/components/recipes/more/(?P<entries>\d+)', RecipeBox),
 	('/components/series/random', SeriesRandomBox),
-	('/components/series/ordered', SeriesOrderedBox),],
+	('/components/series/ordered', SeriesOrderedBox),
+	('/components/cards/cif/valenti', ValentiCard),
+	('/components/cards/contributor/footer', ContributorFooterCard),],
 	debug=True)
