@@ -10,6 +10,7 @@ import configuration
 CONTENT_API_HOST = 'content.guardianapis.com'
 
 api_host = configuration.lookup('CONTENT_API_HOST', CONTENT_API_HOST)
+api_key = configuration.lookup('CONTENT_API_KEY')
 
 def content_id(url):
 	parsed_url = urlparse.urlparse(url)
@@ -19,6 +20,9 @@ def read(content_id, params = None):
 	client = memcache.Client()
 
 	url = "http://%s%s" % (api_host, content_id)
+
+	if not 'api_key' in params and api_key:
+		params['api-key'] = api_key
 
 	if params:
 		url = url + "?" + urllib.urlencode(params)

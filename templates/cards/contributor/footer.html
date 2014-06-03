@@ -44,6 +44,14 @@
 		<div class="contributor-info-card-bio">
 		{{ contributor.bio }}
 		</div>
+		{% if other_stories %}
+		<div class="contributor-info-card-other-stories">
+		<p><strong>Latest stories from {{contributor.webTitle}}</strong></p>
+		{% for story in other_stories %}
+		<p><a href="{{story.webUrl}}">{{story.fields.headline}}</a></p>
+		{% endfor %}
+		</div>
+		{% endif %}
 	</div>
 </div>
 </div>

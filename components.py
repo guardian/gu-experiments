@@ -311,7 +311,9 @@ class ContributorFooterCard(webapp2.RequestHandler):
 		headers.set_cors_headers(self.response)
 		
 		template = jinja_environment.get_template("cards/contributor/footer.html")
-		template_values = {}
+		template_values = {
+			'other_stories' : False,
+		}
 
 		if not 'profile-id' in self.request.params:
 			webapp2.abort(400, 'No profile id supplied')
@@ -320,7 +322,7 @@ class ContributorFooterCard(webapp2.RequestHandler):
 
 		logging.info(profile_id)
 
-		contributor_json = content_api.read(profile_id)
+		contributor_json = content_api.read(profile_id, {'show-fields' : 'headline'})
 
 		logging.info(contributor_json)
 
@@ -330,6 +332,11 @@ class ContributorFooterCard(webapp2.RequestHandler):
 		contributor_data = json.loads(contributor_json)
 		
 		template_values['contributor'] = contributor_data.get('response', {}).get('tag', {})
+
+		if 'other-stories' in self.request.params:
+			search_results = contributor_data.get('response', {}).get('results', [])
+			template_values['other_stories'] = search_results[:3]
+
 
 		self.response.out.write(template.render(template_values))
 
