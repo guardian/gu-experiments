@@ -340,6 +340,127 @@ class ContributorFooterCard(webapp2.RequestHandler):
 
 		self.response.out.write(template.render(template_values))
 
+class MoreCartoonsByContributor(webapp2.RequestHandler):
+	def get(self):
+		template = jinja_environment.get_template("boxes/more-cartoons.html")
+
+		data = {}
+		if not "path" in self.request.params:
+			webapp2.abort(400, 'No path supplied')
+
+		path = self.request.params["path"]
+
+		content = content_api.read(path, {"show-tags" : "contributor"})
+		content_data = json.loads(content)
+
+		authors = [tag for tag in content_data["response"]["content"]["tags"] if tag["type"] == "contributor"]
+
+		if not authors:
+			webapp2.abort(500, "No contributors identified")
+		
+
+		first_author = authors[0]
+
+		data['contributor'] = first_author
+
+		last_60_days = date.today() - timedelta(days=60)
+
+		query = {
+			"tag" : "type/cartoon,{author_id}".format(author_id=first_author["id"]),
+			"show-fields" : "headline,thumbnail",
+			"page-size" : 50,
+			"from-date" : last_60_days.isoformat(),
+		}
+
+		cartoon_search_results = content_api.search(query)
+
+		if not cartoon_search_results:
+			webapp2.abort(500, "Failed to find more cartoons")
+
+		cartoon_search_data = json.loads(cartoon_search_results)
+
+		cartoon_list = cartoon_search_data.get("response", {}).get("results", [])
+
+		cartoons = [c for c in cartoon_list if "thumbnail" in c.get("fields", {})]
+
+		data["cartoons"] = cartoons[:6]
+
+		headers.set_cors_headers(self.response)
+		self.response.out.write(template.render(data))
+
+class ContributorFlyout(webapp2.RequestHandler):
+	def get(self):
+		headers.set_cors_headers(self.response)
+		
+		template = jinja_environment.get_template("cards/contributor/flyout.html")
+		template_values = {
+		}
+
+		if not 'profile-id' in self.request.params:
+			webapp2.abort(400, 'No profile id supplied')
+
+		current_path = None
+		if 'current-path' in self.request.params:
+			current_path = self.request.params['current-path']
+
+		profile_id = self.request.params['profile-id']
+
+		logging.info(profile_id)
+
+		lookup_params = {
+			'page-size' : '30',
+			'show-fields' : 'headline,trailText',
+			'show-elements' : 'image',
+		}
+		contributor_json = content_api.read(profile_id, lookup_params)
+
+		#logging.info(contributor_json)
+
+		if not contributor_json:
+			webapp2.abort(404, 'Could not find data for profile id: {profile_id}'.format(profile_id=profile_id))
+
+		contributor_data = json.loads(contributor_json)
+		
+		template_values['contributor'] = contributor_data.get('response', {}).get('tag', {})
+
+		latest_pieces = contributor_data.get('response', {}).get('results', [])
+
+		#logging.info(latest_pieces)
+
+		def suitable_piece(latest_pieces):
+
+			for piece in latest_pieces:
+				if not 'elements' in piece:
+					continue
+
+				for element in piece['elements']:
+					if not 'assets' in element:
+						continue
+					if not "image" in element.get("type", ""):
+						continue
+
+					suitable_assets = [a for a in element['assets'] if 'typeData' in a and "300" in a['typeData'].get('width', '')]
+
+					if suitable_assets:
+						piece['promo_image'] = suitable_assets[0]
+						yield piece
+			yield None
+
+		suitable_pieces = suitable_piece(latest_pieces)
+
+		suitable_piece = suitable_pieces.next()
+
+		if current_path:
+			while suitable_piece['id'] in current_path:
+				suitable_piece = suitable_pieces.next()
+
+		if not suitable_piece:
+			webapp2.abort(404, 'No suitable pieces found')
+
+		template_values['promoted'] = suitable_piece
+
+		self.response.out.write(template.render(template_values))
+
 app = webapp2.WSGIApplication([
 	('/components/most-popular/(\w{2})/(\d+)', MostPopularByCountry),
 	('/components/most-popular/(\w{2})/(\d+)/section/(?P<section>[a-z-]+)', MostPopularByCountry),
@@ -349,5 +470,7 @@ app = webapp2.WSGIApplication([
 	('/components/series/random', SeriesRandomBox),
 	('/components/series/ordered', SeriesOrderedBox),
 	('/components/cards/cif/valenti', ValentiCard),
-	('/components/cards/contributor/footer', ContributorFooterCard),],
+	('/components/cards/contributor/footer', ContributorFooterCard),
+	('/components/cartoons/by-contributor', MoreCartoonsByContributor),
+	('/components/flyout/contributor', ContributorFlyout),],
 	debug=True)

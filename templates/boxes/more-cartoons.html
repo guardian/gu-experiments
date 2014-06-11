@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html>
+	<body>
+		<style>
+			.promotion-box {
+				display: inline-block;
+				max-width: 140px;
+				margin-right: 10px;
+				margin-bottom: 10px;
+				vertical-align: top;
+			}
+		</style>
+		<div class="component col-12">
+			<div class="hd"><h2>More cartoons from {{contributor.webTitle}}</h2></div>
+			<div class="bd" id="cartoons-promotion-body">
+				{% for cartoon in cartoons %}
+					<ul class="promotion-box">
+						<li>
+							<a href="{{ cartoon.webUrl }}"><img src="{{ cartoon.fields.thumbnail }}"></a>
+						</li>
+						<li>
+							<a href="{{ cartoon.webUrl}}">{{ cartoon.fields.headline }}</a>
+						</li>
+					</ul>
+				{% endfor %}
+			</div>
+		</div>
+	</body>
+</html>
