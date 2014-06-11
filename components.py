@@ -11,6 +11,7 @@ import logging
 from datetime import date, timedelta
 
 import headers
+import images
 
 from google.appengine.api.urlfetch import fetch
 from google.appengine.api import memcache
@@ -402,6 +403,9 @@ class ContributorFlyout(webapp2.RequestHandler):
 		current_path = None
 		if 'current-path' in self.request.params:
 			current_path = self.request.params['current-path']
+
+		if 'show-logo' in self.request.params:
+			template_values['logo'] = images.guardian_logo
 
 		profile_id = self.request.params['profile-id']
 
