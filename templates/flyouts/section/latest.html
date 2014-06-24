@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html>
+<body>
+
+<div class="flyout-promo">
+
+	<style>
+	.flyout-promo-strapline {
+		padding-top: 0.25rem;
+		font-size: 1rem;
+	}
+	</style>
+
+	<p class="flyout-promo-strapline"><strong>More US opinion from:</strong></p>
+
+	<h3><a href="{{promoted.webUrl}}"><img alt="Latest from CiF America" src="{{logo}}" width="100%" title="{{promoted.fields.headline}}"></a></h3>
+
+	<p><strong><a href="{{promoted.webUrl}}">{{promoted.fields.headline}}</a></strong></p>
+
+	<div class="flyout-contrib-promo-image-wrapper"><a href="{{promoted.webUrl}}"><img src="{{promoted.promo_image.file}}"/></a></div>
+
+	<div class="flyout-contrib-promo-text">
+	<a href="{{promoted.webUrl}}">{{promoted.fields.trailText}}</a>
+	</div>
+</div>
+
+</body>
+</html>

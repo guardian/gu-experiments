@@ -465,6 +465,75 @@ class ContributorFlyout(webapp2.RequestHandler):
 
 		self.response.out.write(template.render(template_values))
 
+class USCifFlyout(webapp2.RequestHandler):
+	def get(self):
+		headers.set_cors_headers(self.response)
+		
+		template = jinja_environment.get_template("flyouts/section/latest.html")
+		template_values = {
+			'logo' : images.guardian_logo,
+		}
+
+
+		current_path = None
+		if 'current-path' in self.request.params:
+			current_path = self.request.params['current-path'] 
+
+		lookup_params = {
+			'page-size' : '30',
+			'show-fields' : 'headline,trailText',
+			'show-elements' : 'image',
+			'show-editors-picks' : 'true',
+			'edition' : 'us',
+			'tag' : 'type/article',
+		}
+		cif_us_json = content_api.read('/us/commentisfree', lookup_params)
+
+		#logging.info(contributor_json)
+
+		if not cif_us_json:
+			webapp2.abort(404, 'Could not find data for US Cif')
+
+		cif_data = json.loads(cif_us_json)
+
+		latest_pieces = cif_data.get('response', {}).get('editorsPicks', [])
+
+		#logging.info(latest_pieces)
+
+		def suitable_piece(latest_pieces):
+
+			for piece in latest_pieces:
+				if not 'elements' in piece:
+					continue
+
+				for element in piece['elements']:
+					if not 'assets' in element:
+						continue
+					if not "image" in element.get("type", ""):
+						continue
+
+					suitable_assets = [a for a in element['assets'] if 'typeData' in a and "300" in a['typeData'].get('width', '')]
+
+					if suitable_assets:
+						piece['promo_image'] = suitable_assets[0]
+						yield piece
+			yield None
+
+		suitable_pieces = suitable_piece(latest_pieces)
+
+		suitable_piece = suitable_pieces.next()
+
+		if current_path:
+			while suitable_piece['id'] in current_path:
+				suitable_piece = suitable_pieces.next()
+
+		if not suitable_piece:
+			webapp2.abort(404, 'No suitable pieces found')
+
+		template_values['promoted'] = suitable_piece
+
+		self.response.out.write(template.render(template_values))
+
 app = webapp2.WSGIApplication([
 	('/components/most-popular/(\w{2})/(\d+)', MostPopularByCountry),
 	('/components/most-popular/(\w{2})/(\d+)/section/(?P<section>[a-z-]+)', MostPopularByCountry),
@@ -476,5 +545,6 @@ app = webapp2.WSGIApplication([
 	('/components/cards/cif/valenti', ValentiCard),
 	('/components/cards/contributor/footer', ContributorFooterCard),
 	('/components/cartoons/by-contributor', MoreCartoonsByContributor),
-	('/components/flyout/contributor', ContributorFlyout),],
+	('/components/flyout/contributor', ContributorFlyout),
+	('/components/flyout/cif/us', USCifFlyout),],
 	debug=True)
