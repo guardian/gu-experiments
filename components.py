@@ -342,7 +342,7 @@ class ContributorFooterCard(webapp2.RequestHandler):
 		self.response.out.write(template.render(template_values))
 
 class MoreCartoonsByContributor(webapp2.RequestHandler):
-	def get(self):
+	def get(self, size="6"):
 		template = jinja_environment.get_template("boxes/more-cartoons.html")
 
 		data = {}
@@ -384,7 +384,7 @@ class MoreCartoonsByContributor(webapp2.RequestHandler):
 
 		cartoons = [c for c in cartoon_list if "thumbnail" in c.get("fields", {})]
 
-		data["cartoons"] = cartoons[:6]
+		data["cartoons"] = cartoons[:int(size)]
 
 		headers.set_cors_headers(self.response)
 		self.response.out.write(template.render(data))
@@ -408,6 +408,9 @@ class ContributorFlyout(webapp2.RequestHandler):
 			template_values['logo'] = images.guardian_logo
 
 		profile_id = self.request.params['profile-id']
+
+		if not profile_id.startswith('/'):
+			profile_id = "/" + profile_id
 
 		logging.info(profile_id)
 
@@ -534,6 +537,43 @@ class USCifFlyout(webapp2.RequestHandler):
 
 		self.response.out.write(template.render(template_values))
 
+class ArticleBottomPromoCard(webapp2.RequestHandler):
+	def get(self):
+		headers.set_cors_headers(self.response)
+		
+		template = jinja_environment.get_template("cards/article/bottom-front-promo.html")
+		template_values = {
+			'logo' : images.guardian_logo,
+		}
+
+		lookup_params = {
+			'page-size' : '30',
+			'show-fields' : 'headline,trailText',
+			'show-elements' : 'image',
+			'show-editors-picks' : 'true',
+			'edition' : 'us',
+			'tag' : 'type/article',
+		}
+
+		headline_cap = 3
+
+		us_result = content_api.read('/', lookup_params)
+
+		us_json = json.loads(us_result)
+
+		logging.info(us_json)
+
+		if not us_json:
+			webapp2.abort(404, 'Could not find data for US Front')
+
+		latest_pieces = us_json.get('response', {}).get('editorsPicks', [])
+
+		#logging.info(latest_pieces)
+
+		template_values['latest'] = latest_pieces[:headline_cap]
+
+		self.response.out.write(template.render(template_values))
+
 app = webapp2.WSGIApplication([
 	('/components/most-popular/(\w{2})/(\d+)', MostPopularByCountry),
 	('/components/most-popular/(\w{2})/(\d+)/section/(?P<section>[a-z-]+)', MostPopularByCountry),
@@ -544,7 +584,8 @@ app = webapp2.WSGIApplication([
 	('/components/series/ordered', SeriesOrderedBox),
 	('/components/cards/cif/valenti', ValentiCard),
 	('/components/cards/contributor/footer', ContributorFooterCard),
-	('/components/cartoons/by-contributor', MoreCartoonsByContributor),
+	webapp2.Route(r'/components/cartoons/by-contributor/size/<size:\d+>', handler=MoreCartoonsByContributor),
 	('/components/flyout/contributor', ContributorFlyout),
-	('/components/flyout/cif/us', USCifFlyout),],
+	('/components/flyout/cif/us', USCifFlyout),
+	('/components/cards/article/us-promo', ArticleBottomPromoCard),],
 	debug=True)

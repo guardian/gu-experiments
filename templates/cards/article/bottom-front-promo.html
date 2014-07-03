@@ -1,0 +1,44 @@
+<!doctype HTML>
+<html>
+<body>
+<div class="us-home-promotion">
+
+<style>
+.us-home-promotion {
+	padding-top: 0.8rem;
+}
+.uhp-logo {
+	display: block;
+	padding-bottom: 0.5rem;
+	height: 3rem;
+}
+.uhp-story-links, .uhp-story-links-heading {
+	padding: 0 0.8rem;
+}
+.uhp-blurb {
+	font-size: 1.3em;
+}
+
+.uhp-story-links-heading {
+	font-size: 0.9rem;
+	color: #888;
+}
+</style>
+
+<img class="uhp-logo" src="{{logo}}"/>
+
+<p class="uhp-blurb"><a class="uhp-homepage-link" href="http://www.theguardian.com/us">Read our US homepage</a> for the latest news and opinion from the world's leading liberal voice</p>
+
+{% if latest %}
+<p class="uhp-story-links-heading">Latest headlines</p>
+<ul class="uhp-story-links">
+{% for piece in latest %}
+<li><a class="uhp-story-link" href="{{piece.webUrl}}">{{piece.fields.headline}}</a></li>
+{% endfor %}
+</ul>
+
+{% endif %}
+</div>
+
+</body>
+</html>
