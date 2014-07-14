@@ -4,18 +4,14 @@
 <body>
 
 <div class="flyout-promo flyout-contrib-promo">
-	{% if logo %}
-	<h3><a href="{{promoted.webUrl}}"><img alt="Latest from {{contributor.webTitle}}" src="{{logo}}" width="100%" title="{{promoted.fields.headline}}"></a></h3>
-	{% else %}
-	<h3 class="flyout-promo-heading"><a href="{{promoted.webUrl}}">Latest by {{contributor.webTitle}}</a></h3>
-	{% endif %}
+	<h3 class="flyout-promo-heading"><a href="{{contributor.webUrl}}">Latest by {{contributor.webTitle}}</a></h3>
 
 	<p class="flyout-promo-headline"><strong><a href="{{promoted.webUrl}}">{{promoted.fields.headline}}</a></strong></p>
 
 	<div class="flyout-contrib-promo-image-wrapper"><a href="{{promoted.webUrl}}"><img src="{{promoted.promo_image.file}}"/></a></div>
 
 	<div class="flyout-contrib-promo-text">
-	<a href="{{promoted.webUrl}}">{{promoted.fields.trailText}}</a>
+	{{promoted.fields.trailText}}
 	</div>
 </div>
 

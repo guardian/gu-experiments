@@ -561,7 +561,7 @@ class ArticleBottomPromoCard(webapp2.RequestHandler):
 
 		us_json = json.loads(us_result)
 
-		logging.info(us_json)
+		#logging.info(us_json)
 
 		if not us_json:
 			webapp2.abort(404, 'Could not find data for US Front')
