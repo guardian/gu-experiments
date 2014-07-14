@@ -1,0 +1,156 @@
+<body>
+<aside class="user-interaction-demo-wrapper">
+
+	<div class="facia-container facia-container--layout-article facia-container--default-heading">
+		<div class="container">
+			<div class="facia-container__inner">
+				<div class="container__border">
+				<h2 class="container__title">Your thoughts</h2>
+				<div class="container__body">
+					<h3>How does this make you feel?</h3>
+					<form class="form" action='#'>
+					<div class="input">
+						<input class="text-input" type="text" name="feeling" id="feeling">
+					</div>
+					</form>
+
+				</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="facia-container facia-container--layout-article facia-container--default-heading">
+		<div class="container">
+			<div class="facia-container__inner">
+				<div class="container__border">
+				<h2 class="container__title">Corrections &amp; corrections</h2>
+				<div class="container__body">
+					<form class="form">
+						<fieldset class="fieldset">
+							<div class="fieldset__heading">
+								<h2 class="form__heading">Contact me about a correction</h2>
+							</div>
+
+							<div class="fieldset__fields">
+								<ul class="u-unstyled">
+									<li class="form-field">
+										<label class="label" for="correction-email">Your email</label>
+										<div class="input">
+											<input type="email" name="correction-email" id="correction-email" required>
+										</div>
+									</li>
+									<li class="form-field">
+										<label class="label" for="correction-description">What is the problem?</label>
+										<div class="input">
+											<textarea required>
+											</textarea>
+										</div>
+									</li>
+									<li class="form-field">
+										<button type="submit" class="submit-input">Submit</button>
+									</li>
+								</ul>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="facia-container facia-container--layout-article facia-container--default-heading">
+		<div class="container">
+			<div class="facia-container__inner">
+				<div class="container__border">
+				<h2 class="container__title">Membership</h2>
+				<div class="container__body">
+					<p>Where does the story go next? We're currently preparing these articles that you support with your <a href="https://membership.theguardian.com">Membership</a> ScottCoins &#8482;.</p>
+					
+					<style>
+						.sc-funded-stories {
+							display: table;
+							width: 100%;
+
+						}
+						.sc-funded-story {
+							display: table-cell;
+							min-width: 33%;
+							padding-right: 3rem;
+						}
+						.sc-fund-btn {
+							font-size: 90%;
+							float: right;
+							clear: left;
+							background-color: #008960;
+							color: white;
+							text-align: center;
+							cursor: pointer;
+							outline: medium none;
+							border: 0px none;
+							padding: 0.5rem 1rem;
+						}
+					</style>
+					<div class="sc-funded-stories">
+						<div class="sc-funded-story">
+							<p>Independent filmaking</p>
+							<button class="sc-fund-btn">Fund</button>
+						</div>
+						<div class="sc-funded-story">
+							<p>Independent filmaking</p>
+							<button class="sc-fund-btn">Fund</button>
+						</div>
+						<div class="sc-funded-story">
+							<p>Independent filmaking</p>
+							<button class="sc-fund-btn">Fund</button>
+						</div>
+					</div>
+
+					<form class="form">
+						<fieldset class="fieldset">
+							<div class="fieldset__heading">
+								<h2 class="form__heading">Propose a new article</h2>
+							</div>
+
+							<div class="fieldset__fields">
+								<ul class="u-unstyled">
+									<li class="form-field">
+										<label class="label" for="pa-title">Proposed title</label>
+										<div class="input">
+											<input type="text" name="pa-title" id="pa-title">
+										</div>
+									</li>
+									<li class="form-field">
+										<label class="label" for="pa-description">Describe your proposal</label>
+										<div class="input">
+											<textarea>
+											</textarea>
+										</div>
+									</li>
+									<li class="form-field">
+										<button type="submit" class="submit-input">Submit</button>
+									</li>
+								</ul>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<style>
+		.tt-suggestions {
+			background-color: white;
+			padding: 0.5rem 1rem;
+			border: 1px solid grey;
+			overflow: visible !important;
+			z-index: 150;
+		}
+		.tt-dropdown-menu, .tt-suggestion {
+			overflow-y: auto !important;
+		}
+	</style>
+</aside>
+</body>

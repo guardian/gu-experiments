@@ -1,5 +1,5 @@
 application: rrees-experiments
-version: 19
+version: 20
 runtime: python27
 api_version: 1
 threadsafe: true
@@ -9,6 +9,8 @@ handlers:
   script: components.app
 - url: /data/.*
   script: data.app
+- url: /js/.*
+  script: js.app
 - url : /.*
   script: experiments.app
 

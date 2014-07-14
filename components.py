@@ -574,6 +574,15 @@ class ArticleBottomPromoCard(webapp2.RequestHandler):
 
 		self.response.out.write(template.render(template_values))
 
+class UserInteractionDemo(webapp2.RequestHandler):
+	def get(self):
+		template = jinja_environment.get_template("cards/user-interaction.html")
+		template_values = {}
+
+		headers.set_cors_headers(self.response)
+
+		self.response.out.write(template.render(template_values))
+
 app = webapp2.WSGIApplication([
 	('/components/most-popular/(\w{2})/(\d+)', MostPopularByCountry),
 	('/components/most-popular/(\w{2})/(\d+)/section/(?P<section>[a-z-]+)', MostPopularByCountry),
@@ -587,5 +596,6 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/components/cartoons/by-contributor/size/<size:\d+>', handler=MoreCartoonsByContributor),
 	('/components/flyout/contributor', ContributorFlyout),
 	('/components/flyout/cif/us', USCifFlyout),
-	('/components/cards/article/us-promo', ArticleBottomPromoCard),],
+	('/components/cards/article/us-promo', ArticleBottomPromoCard),
+	('/components/cards/ng/user-interaction', UserInteractionDemo),],
 	debug=True)
