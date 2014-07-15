@@ -26,6 +26,34 @@
 		</div>
 	</div>
 
+	<style>
+		.corrections-list {
+			display: table;
+		}
+		.correction {
+			display: table-row;
+		}
+		.correction-summary, .correction-actions{
+			display: table-cell;
+		}
+		.correction-summary {
+			width: 80%;
+			padding-right: 5rem;
+		}
+		.correction-actions {
+			width: 20%;
+		}
+		.correction-action-icon {
+			margin-right: 1rem;
+			display: inline-block;
+			font-size: 0.9rem;
+		}
+		.correction-action-tip {
+			vertical-align: top;
+			font-size: 1rem;
+			text-align: center;
+		}
+	</style>
 	<div class="facia-container facia-container--layout-article facia-container--default-heading">
 		<div class="container">
 			<div class="facia-container__inner">
@@ -34,11 +62,22 @@
 				<div class="container__body">
 					<p>Every day the Guardian publishes over 400 pieces of content, inevitably mistakes creep in but we are eager to correct style issues and factual mistakes.</p>
 
+					<h3><strong>Pending corrections for this article</strong></h3>
 					<div class="corrections-list">
 						<div class="correction">
 							<div class="correction-summary">
+							<a href="#">Gregg Alexander shares co-writing credits with Amy Phillips...</a>
 							</div>
 							<div class="correction-actions">
+							<img src="http://localhost:13000/public/images/plus-one.svg" width="20px" height="20px" title="+1">
+							</div>
+						</div>
+						<div class="correction">
+							<div class="correction-summary">
+							<a href="#">Typo KKK should presumably be KK (Kiera Knightly)</a>
+							</div>
+							<div class="correction-actions">
+							<img src="http://localhost:13000/public/images/plus-one.svg" width="20px" height="20px" title="+1" class="correction-action-icon"> <button class="correction-action-tip center">Tip</button>
 							</div>
 						</div>
 					</div>
@@ -65,9 +104,9 @@
 										</div>
 									</li>
 									<li class="form-field">
-										<label class="label" for="correction-description">What is the problem?</label>
+										<label class="label" for="correction-description">Additional information</label>
 										<div class="input">
-											<textarea required class="full-width">
+											<textarea class="full-width">
 											</textarea>
 										</div>
 									</li>
@@ -90,13 +129,18 @@
 				<div class="container__border">
 				<h2 class="container__title">Membership</h2>
 				<div class="container__body">
-					<p>Where does the story go next? We're currently preparing these articles that you support with your <a href="https://membership.theguardian.com">Membership</a> ScottCoins &#8482;.</p>
+					<p>Where does the story go next?<br>We're currently preparing these articles that you support with your <a href="https://membership.theguardian.com">Membership</a> ScottCoins &#8482;.</p>
 					
 					<style>
 						.sc-funded-stories, .sc-funding-bar {
 							display: table;
 							width: 100%;
 
+						}
+						.sc-funded-stories {
+							border-top: 1px solid #F1F1F1;
+							margin-top: 1.1rem;
+							padding-top: 1rem;
 						}
 						.sc-funded-story {
 							display: table-cell;
@@ -161,6 +205,7 @@
 						<fieldset class="fieldset">
 							<div class="fieldset__heading">
 								<h2 class="form__heading">Propose a new article</h2>
+								<p class="form__note">Proposing a new piece will cost you 10 ScottCoins</p>
 							</div>
 
 							<div class="fieldset__fields">
@@ -168,13 +213,13 @@
 									<li class="form-field">
 										<label class="label" for="pa-title">Proposed title</label>
 										<div class="input">
-											<input type="text" name="pa-title" id="pa-title">
+											<input type="text" name="pa-title" id="pa-title" class="full-width">
 										</div>
 									</li>
 									<li class="form-field">
 										<label class="label" for="pa-description">Describe your proposal</label>
 										<div class="input">
-											<textarea>
+											<textarea class="full-width">
 											</textarea>
 										</div>
 									</li>
