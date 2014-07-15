@@ -144,8 +144,8 @@
 						}
 						.sc-funded-story {
 							display: table-cell;
-							min-width: 33%;
-							padding-right: 3rem;
+							min-width: 30%;
+							padding: 0 1.5rem;
 						}
 						.sc-fund-btn {
 							font-size: 90%;
@@ -162,6 +162,7 @@
 						.sc-story-title {
 							font-style: italic;
 							font-weight: bold;
+							min-height: 4.5rem;
 						}
 						.sc-funding-bar {
 							height: 1rem;
@@ -176,21 +177,56 @@
 						.sc-funding-bar, .sc-amount-remaining {
 							background-color: red;
 						}
+						.sc-promo-image {
+							width: 100%;
+							max-width: 260px;
+							text-align: center;
+						}
+						.sc-story-description {
+							min-height: 30rem;
+						}
 					</style>
 					<div class="sc-funded-stories">
 						<div class="sc-funded-story">
-							<p>The future of independent filmaking</p>
+							<p class="sc-story-title">The future of independent filmmaking</p>
+							<div class="sc-promo-image"><img src="http://localhost:13000/public/images/film-making.jpg" height="160px"></div>
+
+							<div class="sc-story-description">
+							<p>From Easy Rider to lofi, mumblecore; independent filmmaking has always been at the heart of discovering new storytelling techniques and aesthetics in film.</p>
+							<p>With many established directors chosing to harness digital technology and their existing contacts to create films outside the studio system are we seeing the rise of the genuine and digital auteur?</p>
+							</div>
+
+							<div class="sc-funding-bar">
+								<div class="sc-amount-funded" style="width: 55%" title="55% funded"></div>
+								<div class="sc-amount-remaining" style="45%" title="433SC remaining until funded"></div>
+							</div>
+
 							<button class="sc-fund-btn">Fund</button>
 						</div>
 						<div class="sc-funded-story">
-							<p>Kiera Knightly: a retrospective</p>
+							<p class="sc-story-title">Kiera Knightly: a retrospective</p>
+							<div class="sc-promo-image"><img src="http://localhost:13000/public/images/kiera.jpg" height="160px"></div>
+
+							<div class="sc-story-description">
+							<p>Kiera Knightly? Talentess toff, overhyped manic pixie girl or part of a great British acting generation which is destined to be regarded as a retrospective silver age.</p>
+							<p>Interviews with critics and contempories as to how an actor is defined by the times they find themselves in as much as their looks, talent or background.</p>
+							</div>
+
+							<div class="sc-funding-bar">
+								<div class="sc-amount-funded" style="width: 10%" title="10% funded"></div>
+								<div class="sc-amount-remaining" style="90%" title="1040SC remaining until funded"></div>
+							</div>
+
 							<button class="sc-fund-btn">Fund</button>
 						</div>
 						<div class="sc-funded-story">
-							<p class="sc-story-title">The creative impulse</p>
-							<div class="sc-promo-image"><img src="http://localhost:13000/public/images/sculptor.jpg"></div>
+							<p class="sc-story-title">The creative impulse: an exploration</p>
+							<div class="sc-promo-image"><img src="http://localhost:13000/public/images/sculptor.jpg" height="160px"></div>
+
+							<div class="sc-story-description">
 							<p>A collection of interviews with prolific creators that tries to understand what drives them to create and refine their work over careers.</p>
 							<p>This will be a collection of written and video interviews and will cover a range of activities from community art to the literary novel.</p>
+							</div>
 
 							<div class="sc-funding-bar">
 								<div class="sc-amount-funded" style="width: 70%" title="70% funded"></div>
