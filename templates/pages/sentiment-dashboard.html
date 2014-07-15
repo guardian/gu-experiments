@@ -3,30 +3,183 @@
 {% block title %}Simple python app example{% endblock %}
 
 {% block content %}
+<style>
+.quote-source {
+	text-align: right;
+	font-style: italic;
+}
+.page-heading-block {
+	margin-bottom: 1rem;
+}
+.correction-headline {
+	font-size: 1.7rem;
+}
+.valid-corrections {
+	font-style: super;
+}
+.feeling {
+	margin-bottom: 0.8rem;
+}
+.feeling-positive {
+	color: green;
+}
+.feeling-negative {
+	color: red;
+}
+.feeling-indifferent {
+	color: #666;
+}
+.country-icon {
+	vertical-align: top;
+}
+
+.correction-button-bar .btn {
+	padding: 0 0.5rem;
+	margin-bottom: 0.5rem;
+}
+.correction-importance {
+	font-size: 3rem;
+	color: #ddd;
+	float: right;
+}
+.valid-corrections {
+	color: green;
+}
+
+.corrections-list {
+	list-style: none;
+	padding-left: 0;
+}
+
+.row {
+	border-bottom: solid 1px #f1f1f1;
+	margin-bottom: 1rem;
+	padding-bottom: 1rem;
+}
+</style>
+
 <div class="container">
 	<div class="row">
-		<div class="col-md-12">
-			<h1 class="article-heading">Simple Python app for Google Appengine</h1>
+		<div class="col-md-12 page-heading-block">
+			<h1>Sentiment Dashboard</h1>
 
-			<blockquote>Making it easy to make simple apps</blockquote>
+			<blockquote class="lead">Good morning Vietnam! How are we feeling this morning!</blockquote>
+			<p class="quote-source"><small>Good Morning Vietnam</small></p>
 		</div>
 	</div>
 
 	<div class="row">
-		<div class="col-md-6">
-			<h2 class="sub-heading">What is this?</h2>
-			<p>This is a template app to provide a basic scaffold for a Python app deployed on Google App Engine.</p>
-			<p>It is meant to provide a good basis for relatively uncomplicated small applications.</p>
+		<div class="col-md-3">
+			<h2>Feelings</h2>
+			<p>Trending feelings from the last 24 hours</p>
 		</div>
-		<div class="col-md-6">
-			<h2 class="sub-heading">How do I use it?</h2>
 
-			<ol>
-				<li>Add the git repo as a remote to your project repo and pull the template into your new project.</li>
-				<li>That's it.</li>
+		<div class="feelings-summaries">
+				<div class="feelings-summary col-md-3">
+					<h3>Feeling good</h3>
+					<ol class="feelings-summary-list">
+						<li class="feeling feeling-positive">Tour de France</li>
+						<li class="feeling feeling-positive">World Cup</li>
+						<li class="feeling feeling-positive">&#8593; Fillings</li>
+					</ol>
+				</div>
+
+				<div class="feelings-summary col-md-3">
+					<h3>Feeling bad</h3>
+					<ol class="feelings-summary-list">
+						<li class="feeling feeling-negative">&#8593; <img class="country-icon" height="10px" src="/public/images/uk_union_flag.svg"> Michael Gove</li>
+						<li class="feeling feeling-negative">Palestine</li>
+						<li class="feeling feeling-negative">&#8595; Elections</li>
+					</ol>
+				</div>
+
+				<div class="feelings-summary col-md-3">
+					<h3>Not feeling it at all</h3>
+					<ol class="feelings-summary-list">
+						<li class="feeling feeling-indifferent">Miley Cyrus</li>
+						<li class="feeling feeling-indifferent">&#8593; Reshuffle</li>
+						<li class="feeling feeling-indifferent">&#8595; <img class="country-icon" height="10px" src="/public/images/Flag_of_Brazil.svg"> World Cup</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+
+	<div class="row">
+
+		<div class="col-md-6 corrections-block">
+			<h2>Corrections</h2>
+
+			<ol class="corrections-list">
+				<li>
+					<p class="correction-importance">112</p>
+					<div class="correction-button-bar">
+						<button type="button" class="btn btn-default">+</button>
+						<button type="button" class="btn btn-default">-</button>
+					</div>
+
+					<p class="correction-headline"><a href="#">Wrong description of the powers of the European parliament</a></p>
+					<p><a href="http://www.theguardian.com/world/2014/jul/15/jean-claude-juncker-european-commission-president">Juncker expected to be confirmed as European commission president</a></p>
+					<p class="correction-submitter">Kevin Shields <sup class="valid-corrections">18</sup></p>
+				</li>
+				<li>
+					<p class="correction-importance">64</p>
+					<div class="correction-button-bar">
+						<button type="button" class="btn btn-default">+</button>
+						<button type="button" class="btn btn-default">-</button>
+					</div>
+
+					<p class="correction-headline"><a href="#">Incident did not happen in Occupied Territories</a></p>
+					<p class="content-headline"><a href="http://www.theguardian.com/world/2014/jul/15/israel-accepts-egypt-ceasefire-gaza-hamas">Israel accepts Egypt ceasefire plan to end Gaza fighting</a></p>
+					<p class="correction-submitter">CifWatch <sup class="valid-corrections">5</sup></p>
+				</li>
+				<li>
+					<p class="correction-importance">17</p>
+					<div class="correction-button-bar">
+						<button type="button" class="btn btn-default">+</button>
+						<button type="button" class="btn btn-default">-</button>
+					</div>
+
+					<p class="correction-headline"><a href="#">Steven Peters hasn't been convicted of bribery in Russia</a></p>
+					<p class="story-headline"><a href="http://www.theguardian.com/world/2014/jul/15/moscow-subway-accident-dead-russia">Moscow subway accident leaves at least 10 dead</a></p>
+					<p class="correction-submitter">CorruptPR <sup class="valid-correction">5</sup></p>
+				</li>
+				<p class="lead"><a href="#">32 more...</a></p>
 			</ol>
+		</div>
+
+		<div class="col-md-6 contributoria-block">
+			<h2>Contributoria</h2>
+
+			<div class="contributoria-story">
+				<h3 class="contributoria-story-title">The hidden cost of sweet potatoes</h3>
+				<p class="contributoria-prediction">Currently 93% funded and likely to be funded <em>today</em>.</p>
+				<p>512 funders</p>
+
+			</div>
 
 
+			<div class="contributoria-story">
+				<h3 class="contributoria-story-title">Elon Musk profile</h3>
+				<p class="contributoria-prediction">Currently 30% funded and likely to be funded <em>today</em>.</p>
+				<p>329 funders</p>
+
+			</div>
+
+			<div class="contributoria-story">
+				<h3 class="contributoria-story-title">Russia's forgotten wars</h3>
+				<p class="contributoria-prediction">Currently 80% funded and likely to be funded <em>in three days</em>.</p>
+				<p>1300 funders</p>
+
+			</div>
+
+			<div class="contributoria-story">
+				<h3 class="contributoria-story-title">The end of coal: what happens when solar energy costs nothing</h3>
+				<p class="contributoria-prediction">Currently 47% funded and likely to be funded <em>in a week</em>.</p>
+				<p>224 funders</p>
+
+			</div>
+
+			<p class="lead">See all on <a href="https://www.contributoria.com/">Contributoria</a></p>
 		</div>
 	</div>
 </div>
