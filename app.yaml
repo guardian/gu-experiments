@@ -9,6 +9,8 @@ handlers:
   static_dir: public
 - url: /components/.*
   script: components.app
+- url: /pages/.*
+  script: pages.app
 - url: /data/.*
   script: data.app
 - url: /js/.*

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>{% block title %}{% endblock %}</title>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+		<link href="/public/css/bootstrap.min.css" rel="stylesheet"/>
+		<link href="/public/css/bootstrap-theme.min.css" rel="stylesheet"/>
+		<link href="/public/css/base.css" rel="stylesheet"/>
+		<link rel="shortcut icon" href="http://static.guim.co.uk/favicon.ico" type="image/x-icon" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+
+	<body>
+		{% block content %}
+		{% endblock %}
+	</body>
+</html>

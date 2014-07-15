@@ -1,6 +1,12 @@
 <body>
 <aside class="user-interaction-demo-wrapper">
 
+	<style>
+		.full-width {
+			width: 100%;
+		}
+	</style>
+
 	<div class="facia-container facia-container--layout-article facia-container--default-heading">
 		<div class="container">
 			<div class="facia-container__inner">
@@ -26,10 +32,22 @@
 				<div class="container__border">
 				<h2 class="container__title">Corrections &amp; corrections</h2>
 				<div class="container__body">
+					<p>Every day the Guardian publishes over 400 pieces of content, inevitably mistakes creep in but we are eager to correct style issues and factual mistakes.</p>
+
+					<div class="corrections-list">
+						<div class="correction">
+							<div class="correction-summary">
+							</div>
+							<div class="correction-actions">
+							</div>
+						</div>
+					</div>
+
 					<form class="form">
 						<fieldset class="fieldset">
 							<div class="fieldset__heading">
 								<h2 class="form__heading">Contact me about a correction</h2>
+								<p class="form__note">Corrections are sent to an automatic system for evaluation but we make every effort to respond individually to each submission</p>
 							</div>
 
 							<div class="fieldset__fields">
@@ -37,13 +55,19 @@
 									<li class="form-field">
 										<label class="label" for="correction-email">Your email</label>
 										<div class="input">
-											<input type="email" name="correction-email" id="correction-email" required>
+											<input type="email" name="correction-email" id="correction-email" required class="full-width">
+										</div>
+									</li>
+									<li class="form-field">
+										<label class="label" for="correction-headline">Problem summary</label>
+										<div class="input">
+											<input type="text" name="correction_headline" id="correction-headline" required class="full-width">
 										</div>
 									</li>
 									<li class="form-field">
 										<label class="label" for="correction-description">What is the problem?</label>
 										<div class="input">
-											<textarea required>
+											<textarea required class="full-width">
 											</textarea>
 										</div>
 									</li>
@@ -69,7 +93,7 @@
 					<p>Where does the story go next? We're currently preparing these articles that you support with your <a href="https://membership.theguardian.com">Membership</a> ScottCoins &#8482;.</p>
 					
 					<style>
-						.sc-funded-stories {
+						.sc-funded-stories, .sc-funding-bar {
 							display: table;
 							width: 100%;
 
@@ -95,6 +119,19 @@
 							font-style: italic;
 							font-weight: bold;
 						}
+						.sc-funding-bar {
+							height: 1rem;
+							margin-bottom: 1rem;
+						}
+						.sc-amount-funded, .sc-amount-remaining {
+							display: table-cell;
+						}
+						.sc-amount-funded {
+							background-color: green;
+						}
+						.sc-funding-bar, .sc-amount-remaining {
+							background-color: red;
+						}
 					</style>
 					<div class="sc-funded-stories">
 						<div class="sc-funded-story">
@@ -110,6 +147,12 @@
 							<div class="sc-promo-image"><img src="http://localhost:13000/public/images/sculptor.jpg"></div>
 							<p>A collection of interviews with prolific creators that tries to understand what drives them to create and refine their work over careers.</p>
 							<p>This will be a collection of written and video interviews and will cover a range of activities from community art to the literary novel.</p>
+
+							<div class="sc-funding-bar">
+								<div class="sc-amount-funded" style="width: 70%" title="70% funded"></div>
+								<div class="sc-amount-remaining" style="30%" title="230SC remaining until funded"></div>
+							</div>
+
 							<button class="sc-fund-btn">Fund</button>
 						</div>
 					</div>
