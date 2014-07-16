@@ -31,7 +31,15 @@ class SentimentDashboard(webapp2.RequestHandler):
 
 		self.response.out.write(template.render(template_values))
 
+class SentimentWidget(webapp2.RequestHandler):
+	def get(self):
+
+		template = jinja_environment.get_template("pages/sentiment-widget.html")
+		template_values = {}
+
+		self.response.out.write(template.render(template_values))
 app = webapp2.WSGIApplication([
 	webapp2.Route(r'/pages/dashboards/sentiment', handler=SentimentDashboard),
+	webapp2.Route(r'/pages/widgets/sentiment', handler=SentimentWidget),
 	],
 	debug=True)

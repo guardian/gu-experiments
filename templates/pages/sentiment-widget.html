@@ -1,0 +1,194 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}Sentiment widget prototype{% endblock %}
+
+{% block content %}
+<style>
+.twitter-typeahead {
+	display: block !important;
+}
+.tt-hint {
+  color: #999
+}
+
+.tt-dropdown-menu {
+  width: 422px;
+  margin-top: 12px;
+  padding: 8px 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 8px;
+     -moz-border-radius: 8px;
+          border-radius: 8px;
+  -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+     -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+          box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+.tt-suggestion {
+  padding: 3px 20px;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.tt-suggestion.tt-cursor {
+  color: #fff;
+  background-color: #0097cf;
+
+}
+
+.tt-suggestion p {
+  margin: 0;
+}
+
+.sentiment-histogram {
+	display: table;
+	width: 100%;
+}
+.negative-sentiment-hg, .indifferent-sentiment-hg, .positive-sentiment-hg {
+	display: table-cell;
+}
+
+.negative-sentiment-hg {
+	background-color: red;
+	width: 30%;
+}
+.indifferent-sentiment-hg {
+	background-color: gray;
+	width: 10%;
+}
+.positive-sentiment-hg {
+	background-color: green;
+	width: 60%;
+}
+.sentiment-hg {
+	border-bottom: dotted 1px #333;
+}
+
+
+.row {
+	margin-bottom: 2rem;
+}
+</style>
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12 page-heading-block">
+			<h1>Sentiment widget</h1>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+		<form action="#">
+			<div class="form-group">
+				<label for="keyword">Keyword</label>
+				<input id="keyword" type="text" name="keyword" placeholder="Start typing..." class="form-control">
+			</div>
+
+			<label for="keyword">Feeling</label>
+			<input id="feelings" type="text" name="feelings" placeholder="Start typing..." class="form-control">
+			</div>
+
+
+		</form>
+		</div>
+
+
+		<div class="row">
+			<div class="col-md-12">
+				<h2>How we feel... <span class="histogram-subject"></span></h2>
+
+				<div class="sentiment-histogram">
+					<div class="negative-sentiment-hg">
+						<div title="hate" class="sentiment-hg" style="height: 4rem"></div>
+						<div title="pretentious" class="sentiment-hg" style="height: 4rem"></div>
+					</div>
+					<div class="indifferent-sentiment-hg">
+						<div title="meh" class="sentiment-hg" style="height: 2rem"></div>
+					</div>
+					<div class="positive-sentiment-hg">
+						<div title="love" class="sentiment-hg" style="height: 4rem"></div>
+						<div title="great" class="sentiment-hg" style="height: 6rem"
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% block scripts %}
+<script src="/public/js/jquery.min.js"></script>
+<script src="/public/js/typeahead.bundle.min.js"></script>
+<script src="/public/js/handlebars.min.js"></script>
+<script src="/public/js/react-with-addons.min.js"></script>
+{% endblock %}
+
+<script>
+
+var keywords = [
+	{name: "Kiera Knightly", type: "Person"},
+	{name: "Mark Ruffalo", type: "Person"},
+	{name: "Begin Again", type: "Film"},
+];
+
+var feelings = [
+	{name: 'hate', category: 'negative'},
+	{name: 'disappointing', category: 'negative'},
+	{name: 'lacking', category: 'negative'},
+	{name: 'meh', category: 'indifferent'},
+	{name: 'whatever', category: 'indifferent'},
+	{name: 'love', category: 'positive'},
+	{name: 'want to see', category: 'postive', validFor: "Film"}
+];
+
+var substringMatcher = function(strs) {
+  return function findMatches(q, cb) {
+    var matches, substrRegex;
+    console.log(q);
+
+    // an array that will be populated with substring matches
+    matches = [];
+
+    // regex used to determine if a string contains the substring `q`
+    substrRegex = new RegExp(q, 'i');
+
+    // iterate through the pool of strings and for any string that
+    // contains the substring `q`, add it to the `matches` array
+    $.each(strs, function(i, str) {
+      console.log(str);
+      if (substrRegex.test(str.name)) {
+        // the typeahead jQuery plugin expects suggestions to a
+        // JavaScript object, refer to typeahead docs for more info
+        matches.push(str);
+      }
+    });
+
+    cb(matches);
+  };
+};
+
+$('#keyword').typeahead(
+	{
+		minLength: 1
+	},
+	{
+		name: 'keywords',
+		displayKey: 'name',
+		source: substringMatcher(keywords)
+	});
+
+$('#feelings').typeahead(
+	{
+		minLength: 1
+	},
+	{
+		name: 'feelings',
+		displayKey: 'name',
+		source: substringMatcher(feelings)
+	});
+
+$('#keyword').on('change', function() { console.log('Hello world')});
+</script>
+{% endblock %}
